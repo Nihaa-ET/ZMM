@@ -1,0 +1,15 @@
+
+/* seller table */
+
+.seller_table{
+  @apply bg-white
+}
+
+.seller_table th{
+
+  @apply border text-base font-medium
+}
+
+.seller_table td{
+  @apply border text-base font-medium text-center
+}
