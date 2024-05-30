@@ -4,12 +4,14 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import { MdModeEdit, MdDelete } from "react-icons/md";
 import DeleteSellerDetails from "../../components/DeleteSellerDetails";
+import { Link } from "react-router-dom";
 const AllSellerDetails = () => {
   const [allsellers, setAllSellers] = useState([]);
 
   const [deleteModelOpen, setDeleteModelOpen] = useState(false);
 
   const [sellerToDelete, setSellerToDelete] = useState(null);
+
 
   const fetchAllSeller = async () => {
     try {
@@ -79,7 +81,13 @@ const AllSellerDetails = () => {
                 <td>{moment(el?.created_at).format("MMM Do YY")}</td>
                 <td>
                   <button className="border rounded-full p-2 bg-green-600 hover:bg-green-500">
-                    <MdModeEdit className="text-white" />
+                    <nav>
+                      <Link
+                        to={`/seller-deshboard/editSellerDetails/${el?.id}`}
+                      >
+                        <MdModeEdit className="text-white" />
+                      </Link>
+                    </nav>
                   </button>
                   <button
                     className="border rounded-full p-2 bg-red-600 hover:bg-red-500 ml-2"
