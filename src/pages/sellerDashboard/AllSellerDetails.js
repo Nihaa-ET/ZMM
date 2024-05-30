@@ -2,7 +2,8 @@ import React , { useEffect, useState } from 'react'
 import SummaryApi from '../../common';
 import { toast } from 'react-toastify';
 import moment from 'moment';
-import { MdModeEdit,MdDelete  } from "react-icons/md";
+import { MdModeEdit  } from "react-icons/md";
+import { FaTrashAlt } from "react-icons/fa";
 import DeleteSellerDetails from '../../components/DeleteSellerDetails';
 const AllSellerDetails = () => {
 
@@ -22,6 +23,7 @@ const AllSellerDetails = () => {
         const dataResponse = await fetchData.json();
         
         if(dataResponse.success){
+          toast.success(dataResponse.message)
           setAllSellers(dataResponse.data)
         }
         
@@ -34,12 +36,17 @@ const AllSellerDetails = () => {
       }
     };
 
-
+  
   
   const openDeleteModel= (id)=>{
        setSellerToDelete(id)
        setDeleteModelOpen(true)
   }
+
+  const closeDeleteModel = () => {
+    setSellerToDelete(null);
+    setDeleteModelOpen(false);
+};
 
   
     useEffect(() => {
@@ -56,6 +63,13 @@ const AllSellerDetails = () => {
           Delete All Sellers
         </button>
        </div> */}
+
+          {deleteModelOpen && (
+                <DeleteSellerDetails
+                 sellerToDelete={sellerToDelete}
+                    onClose={closeDeleteModel}
+                />
+            )}
 
         <table className='w-full seller_table'>
             <thead>
@@ -74,7 +88,7 @@ const AllSellerDetails = () => {
                 {
                     allsellers.map((el,index)=>{
                         return (
-                            <tr>
+                            <tr key={index}>
                                 <td>{index + 1}</td>
                                 <td>{el?.sellerName}</td>
                                 <td>{el?.companyName}</td>
@@ -90,7 +104,7 @@ const AllSellerDetails = () => {
                                     className='border rounded-full p-2 bg-red-600 hover:bg-red-500 ml-2'
                                    onClick={()=>openDeleteModel(el?.id)}
                                 >
-                                    <MdDelete className='text-white' />
+                                    <FaTrashAlt className='text-white' />
                                 </button>
                                 </td>
                             </tr>
@@ -99,15 +113,7 @@ const AllSellerDetails = () => {
                 }
 
                
-       {
-            
-            deleteModelOpen && (
-
-              <DeleteSellerDetails  onclose={()=>setDeleteModelOpen(false)}/>
-              
-            )
-
-          }
+     
             </tbody>
         </table>
     </div>

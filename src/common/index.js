@@ -1,5 +1,4 @@
 
-
 const backendDomain = "http://localhost:5050"
 
 const SummaryApi = {
@@ -44,7 +43,7 @@ const SummaryApi = {
         url : `${backendDomain}/api/all-sellers`,
         method : "get"
     },
-    Seller_details :{
+    AddSellerDetails :{
         url : `${backendDomain}/api/seller-register-details`,
         method : "post"
     },
@@ -52,11 +51,20 @@ const SummaryApi = {
         url : `${backendDomain}/api/get-all-seller-details`,
         method : "get"
     },
-    DeleteAllSeller : {
-        url : `${backendDomain}/api/deleteSeller/:id`,
+
+    SoftDeleteSeller : {
+        url : `${backendDomain}/api/softDeleteSeller`,
+        method :"PATCH"
+    },
+    GetTrashedSeller :{
+        url : `${backendDomain}/api/getTrashedSeller`,
+        method : "get"
+    },
+    PermanantDeleteSeller : {
+        url : `${backendDomain}/api/permanentDeleteSeller`,
         method : "delete"
     }
 
 }
 
-export default SummaryApi
+export default SummaryApi 

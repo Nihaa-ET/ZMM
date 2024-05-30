@@ -16,6 +16,7 @@ import Settings from '../pages/sellerDashboard/Settings'
 import Support from '../pages/sellerDashboard/Support'
 import AllSellerDetails from '../pages/sellerDashboard/AllSellerDetails'
 import AddSeller from '../pages/sellerDashboard/AddSeller'
+import TrashedSellerDetails from '../components/TrashedSellerDetails'
 
 
 
@@ -66,6 +67,10 @@ const router = createBrowserRouter(
                     {
                         path : "add-seller",
                         element : <AddSeller />
+                    },
+                    {
+                        path : "trash-seller-details",
+                        element : <TrashedSellerDetails />
                     },
                     {
                         path : "dashboard-overview",

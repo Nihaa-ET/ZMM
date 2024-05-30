@@ -36,8 +36,8 @@ const handleSubmit = async (e) => {
  
   try {
 
-    const response = await fetch(SummaryApi.Seller_details.url, {
-      method: SummaryApi.Seller_details.method,
+    const response = await fetch(SummaryApi.AddSellerDetails.url, {
+      method: SummaryApi.AddSellerDetails.method,
       credentials: 'include',
       headers: {
         "Content-Type": "application/json"
@@ -66,7 +66,7 @@ const handleOnChange = (e) => {
 };
 
 
-  const[openAddSeller, setOpenAddSeller] = useState(false)
+  // const[openAddSeller, setOpenAddSeller] = useState(false)
 
   return (
     <div className='p-2'>

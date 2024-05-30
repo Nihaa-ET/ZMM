@@ -9,6 +9,7 @@ import { IoPersonAdd } from "react-icons/io5";
 // import { AiFillSetting } from "react-icons/ai";
 import { HiSupport } from "react-icons/hi";
 import { BiLogOut } from "react-icons/bi";
+import { FcFullTrash } from "react-icons/fc";
 const SideBar = () => {
   return (
     <div>
@@ -27,13 +28,19 @@ const SideBar = () => {
                 <div className='border-none rounded-md bg-pink-500 p-2 '>
                     <RxDashboard className='text-xl'/>
                 </div>
-                <Link to= {"all-seller"} className=''>All Seller</Link>
+                <Link to= {"all-seller"} className=''>All Seller Details</Link>
             </div>
             <div className='border-none bg-white rounded-md p-2 hover:bg-slate-200 text-lg flex items-center gap-3'>
                 <div className='border-none rounded-md bg-pink-500 p-2 '>
                     <IoPersonAdd className='text-xl'/>
                 </div>
                 <Link to= {"add-seller"} className=''>Add Seller</Link>
+            </div>
+            <div className='border-none bg-white rounded-md p-2 hover:bg-slate-200 text-lg flex items-center gap-3'>
+                <div className='border-none rounded-md bg-pink-500 p-2 '>
+                    <FcFullTrash className='text-xl'/>
+                </div>
+                <Link to= {"trash-seller-details"} className=''>Trash Seller Details</Link>
             </div>
             {/* <div className='relative group'>
                 <div className='border-none bg-white rounded-md p-2 hover:bg-slate-200 text-lg flex items-center gap-3'>
