@@ -12,7 +12,6 @@ const AllSellerDetails = () => {
 
   const [sellerToDelete, setSellerToDelete] = useState(null);
 
-
   const fetchAllSeller = async () => {
     try {
       const fetchData = await fetch(SummaryApi.GetAllSellerDetails.url, {
@@ -74,7 +73,12 @@ const AllSellerDetails = () => {
               <tr>
                 <td>{index + 1}</td>
                 <td>{el?.sellerName}</td>
-                <td>{el?.companyName}</td>
+                <td>
+                  <Link to={`/seller-deshboard/viewSellerDetails/${el?.id}`}>
+                    {el?.companyName}
+                    <MdModeEdit className="text-white" />
+                  </Link>
+                </td>
                 <td>{el?.email}</td>
                 <td>{el?.phoneNumber}</td>
                 <td>{el?.role}</td>

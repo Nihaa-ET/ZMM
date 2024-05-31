@@ -1,80 +1,116 @@
 import React, { useEffect, useState } from "react";
-// import { Card, Container, Form, Button, Row, Col } from "react-bootstrap";
-// import "./EditSellerDetails.css";
 import { useNavigate, useParams } from "react-router-dom";
-// import axios from "axios";
+import SummaryApi from "../../common";
+import { toast } from "react-toastify";
+import moment from "moment";
 
 const EditSellerDetails = () => {
   let { id } = useParams();
   const navigate = useNavigate();
+
   const [sellerDetails, setSellerDetails] = useState({
-    name: "",
-    company: "",
-    productCategory: "",
-    stock: "",
+    sellerName: "",
+    companyName: "",
+    email: "",
     phoneNumber: "",
-    emailId: "",
-    gstNo: "",
+    GSTNumber: "",
+    companySize: "",
+    yearFounded: "",
+    companyUrl: "",
+    companyAddress: "",
+    doorNumber: "",
+    roadStreet: "",
+    city: "",
+    district: "",
+    state: "",
+    country: "",
+    pincode: "",
+    company: "",
+    LTD: "",
   });
 
-  //   const getSeller = () => {
-  //     axios
-  //       .get(`http://localhost:5050/api/getSeller/${id}`)
-  //       .then((response) => {
-  //         console.log(response.data.data);
-  //         setSellerDetails(response.data.data[0]);
-  //       })
-  //       .catch((error) => {
-  //         console.error("There was an error fetching the seller data!", error);
-  //       });
-  //   };
+  const formatDateForMySQL = (date) => {
+    return moment(date).format("YYYY-MM-DD");
+  };
 
-  //   useEffect(() => {
-  //     getSeller();
-  //   }, [id]);
+  const editSellerDetails = async (e) => {
+    e.preventDefault();
+    try {
+      const formattedSellerDetails = {
+        ...sellerDetails,
+        yearFounded: formatDateForMySQL(sellerDetails.yearFounded),
+      };
 
-  //   const update = (id, sellerDetails) => {
-  //     console.log(id);
-  //     console.log(sellerDetails);
-  //     axios
-  //       .patch(`http://localhost:5050/api/editseller/${id}`, sellerDetails)
-  //       .then((response) => {
-  //         console.log(response);
-  //         navigate("/");
-  //       })
-  //       .catch((error) => {
-  //         console.error("There was an error updating the seller data!", error);
-  //       });
-  //   };
+      const response = await fetch(
+        `${SummaryApi.EditParticularDetail.url}/${id}`,
+        {
+          method: SummaryApi.EditParticularDetail.method,
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formattedSellerDetails),
+        }
+      );
 
-  // const fetchParticularSeller = async () => {
-  //   try {
-  //     const fetchData = await fetch(SummaryApi.GetAllSellerDetails.url, {
-  //       method: SummaryApi.GetAllSellerDetails.method,
-  //       credentials: "include",
-  //     });
+      const dataApi = await response.json();
+      if (dataApi.success) {
+        toast.success(dataApi.message);
+        navigate("/seller-deshboard/all-seller");
+      } else {
+        toast.error(dataApi.message);
+      }
+    } catch (error) {
+      toast.error("Error during Updating Details");
+    }
+  };
 
-  //     const dataResponse = await fetchData.json();
+  const fetchParticularSeller = async () => {
+    try {
+      const fetchData = await fetch(
+        `${SummaryApi.GetParticularSellerDetails.url}/${id}`,
+        {
+          method: SummaryApi.GetParticularSellerDetails.method,
+          credentials: "include",
+        }
+      );
 
-  //     if (dataResponse.success) {
-  //       setAllSellers(dataResponse.data);
-  //     }
+      const dataResponse = await fetchData.json();
+      if (dataResponse.success) {
+        const sellerData = {
+          ...dataResponse.data[0],
+          yearFounded: moment(dataResponse.data[0].yearFounded).format(
+            "YYYY-MM-DD"
+          ), // Format to YYYY-MM-DD for input field
+        };
+        setSellerDetails(sellerData);
+      } else if (dataResponse.error) {
+        toast.error(dataResponse.message);
+      }
+    } catch (error) {
+      console.error("Error fetching sellers:", error);
+      toast.error("An error occurred while fetching seller.");
+    }
+  };
 
-  //     if (dataResponse.error) {
-  //       toast.error(dataResponse.message);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching sellers:", error);
-  //     toast.error("An error occurred while fetching sellers.");
-  //   }
-  // };
+  useEffect(() => {
+    fetchParticularSeller();
+  }, [id]);
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setSellerDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
+  };
 
   return (
     <div className="p-2">
       <div className="ml-4">
         <h1 className="text-xl uppercase font-bold font-sans">Basic Details</h1>
       </div>
-      <form className="p-4  gap-2 h-full " >
+      <form className="p-4 gap-2 h-full">
         <div className="flex gap-5 items-center justify-between">
           <div className="grid">
             <label htmlFor="sellerName">SellerName* :</label>
@@ -83,9 +119,9 @@ const EditSellerDetails = () => {
               placeholder="Enter your sellerName"
               id="sellerName"
               name="sellerName"
-            //   value={data.sellerName}
-            //   onChange={handleOnChange}
-              className="p-2 border rounded bg-white"
+              value={sellerDetails.sellerName}
+              onChange={handleOnChange}
+              className="p-2 border rounded bg-white w-50"
             />
           </div>
           <div className="grid">
@@ -95,40 +131,40 @@ const EditSellerDetails = () => {
               placeholder="Enter your companyName"
               id="companyName"
               name="companyName"
-            //   value={data.companyName}
-            //   onChange={handleOnChange}
-              className="p-2 border rounded bg-white"
+              value={sellerDetails.companyName}
+              onChange={handleOnChange}
+              className="p-2 border rounded bg-white w-50"
             />
           </div>
           <div className="grid">
             <label htmlFor="email">Email* :</label>
             <input
-              type="text"
+              type="email"
               placeholder="Enter your Email"
               id="email"
               name="email"
-            //   value={data.email}
-            //   onChange={handleOnChange}
-              className="p-2 border rounded bg-white"
+              value={sellerDetails.email}
+              onChange={handleOnChange}
+              className="p-2 border rounded bg-white w-50"
             />
           </div>
           <div className="grid">
-            <label htmlFor="phoneNumber">phoneNumber* :</label>
+            <label htmlFor="phoneNumber">PhoneNumber* :</label>
             <input
-              type="phone"
+              type="tel"
               placeholder="Enter your phoneNumber"
               id="phoneNumber"
               name="phoneNumber"
-            //   value={data.phoneNumber}
-            //   onChange={handleOnChange}
-              className="p-2 border rounded bg-white"
+              value={sellerDetails.phoneNumber}
+              onChange={handleOnChange}
+              className="p-2 border rounded bg-white w-50"
             />
           </div>
         </div>
 
         <div className="mt-6">
           <h1 className="text-xl uppercase font-bold font-sans">
-            company Details
+            Company Details
           </h1>
         </div>
 
@@ -140,9 +176,9 @@ const EditSellerDetails = () => {
               placeholder="Enter your GSTNumber"
               id="GSTNumber"
               name="GSTNumber"
-            //   value={data.GSTNumber}
-            //   onChange={handleOnChange}
-              className="p-2 border rounded bg-white"
+              value={sellerDetails.GSTNumber}
+              onChange={handleOnChange}
+              className="p-2 border rounded bg-white w-50"
             />
           </div>
           <div className="grid">
@@ -152,21 +188,21 @@ const EditSellerDetails = () => {
               placeholder="Enter your companySize"
               id="companySize"
               name="companySize"
-            //   value={data.companySize}
-            //   onChange={handleOnChange}
-              className="p-2 border rounded bg-white"
+              value={sellerDetails.companySize}
+              onChange={handleOnChange}
+              className="p-2 border rounded bg-white w-50"
             />
           </div>
           <div className="grid">
-            <label htmlFor="yearFounded">YearOfFounded* :</label>
+            <label htmlFor="yearFounded">YearFounded* :</label>
             <input
-              type="text"
-              placeholder="Enter your yearOfFounded"
+              type="date"
+              placeholder="Enter your yearFounded"
               id="yearFounded"
               name="yearFounded"
-            //   value={data.yearFounded}
-            //   onChange={handleOnChange}
-              className="p-2 border rounded bg-white"
+              value={sellerDetails.yearFounded}
+              onChange={handleOnChange}
+              className="p-2 border rounded bg-white w-52"
             />
           </div>
           <div className="grid">
@@ -176,9 +212,9 @@ const EditSellerDetails = () => {
               placeholder="Enter your companyUrl"
               id="companyUrl"
               name="companyUrl"
-            //   value={data.companyUrl}
-            //   onChange={handleOnChange}
-              className="p-2 border rounded bg-white"
+              value={sellerDetails.companyUrl}
+              onChange={handleOnChange}
+              className="p-2 border rounded bg-white w-50"
             />
           </div>
         </div>
@@ -191,9 +227,9 @@ const EditSellerDetails = () => {
               placeholder="Enter your companyAddress"
               id="companyAddress"
               name="companyAddress"
-            //   value={data.companyAddress}
-            //   onChange={handleOnChange}
-              className="p-2 border rounded bg-white"
+              value={sellerDetails.companyAddress}
+              onChange={handleOnChange}
+              className="p-2 border rounded bg-white w-50"
             />
           </div>
           <div className="grid">
@@ -203,9 +239,9 @@ const EditSellerDetails = () => {
               placeholder="Enter your door/buildingNumber"
               id="doorNumber"
               name="doorNumber"
-            //   value={data.doorNumber}
-            //   onChange={handleOnChange}
-              className="p-2 border rounded bg-white"
+              value={sellerDetails.doorNumber}
+              onChange={handleOnChange}
+              className="p-2 border rounded bg-white w-50"
             />
           </div>
           <div className="grid">
@@ -215,9 +251,9 @@ const EditSellerDetails = () => {
               placeholder="Enter your roadStreet"
               id="roadStreet"
               name="roadStreet"
-            //   value={data.roadStreet}
-            //   onChange={handleOnChange}
-              className="p-2 border rounded bg-white"
+              value={sellerDetails.roadStreet}
+              onChange={handleOnChange}
+              className="p-2 border rounded bg-white w-50"
             />
           </div>
           <div className="grid">
@@ -227,9 +263,9 @@ const EditSellerDetails = () => {
               placeholder="Enter your city"
               id="city"
               name="city"
-            //   value={data.city}
-            //   onChange={handleOnChange}
-              className="p-2 border rounded bg-white"
+              value={sellerDetails.city}
+              onChange={handleOnChange}
+              className="p-2 border rounded bg-white w-50"
             />
           </div>
         </div>
@@ -242,9 +278,9 @@ const EditSellerDetails = () => {
               placeholder="Enter your district"
               id="district"
               name="district"
-            //   value={data.district}
-            //   onChange={handleOnChange}
-              className="p-2 border rounded bg-white"
+              value={sellerDetails.district}
+              onChange={handleOnChange}
+              className="p-2 border rounded bg-white w-50"
             />
           </div>
           <div className="grid">
@@ -254,9 +290,9 @@ const EditSellerDetails = () => {
               placeholder="Enter your state"
               id="state"
               name="state"
-            //   value={data.state}
-            //   onChange={handleOnChange}
-              className="p-2 border rounded bg-white"
+              value={sellerDetails.state}
+              onChange={handleOnChange}
+              className="p-2 border rounded bg-white w-50"
             />
           </div>
           <div className="grid">
@@ -266,9 +302,9 @@ const EditSellerDetails = () => {
               placeholder="Enter your country"
               id="country"
               name="country"
-            //   value={data.country}
-            //   onChange={handleOnChange}
-              className="p-2 border rounded bg-white"
+              value={sellerDetails.country}
+              onChange={handleOnChange}
+              className="p-2 border rounded bg-white w-50"
             />
           </div>
           <div className="grid">
@@ -278,14 +314,14 @@ const EditSellerDetails = () => {
               placeholder="Enter your pincode"
               id="pincode"
               name="pincode"
-            //   value={data.pincode}
-            //   onChange={handleOnChange}
-              className="p-2 border rounded bg-white"
+              value={sellerDetails.pincode}
+              onChange={handleOnChange}
+              className="p-2 border rounded bg-white w-50"
             />
           </div>
         </div>
 
-        <div className="flex gap-10 items-center mt-6">
+        <div className="flex gap-0.5 items-center mt-6">
           <div className="grid">
             <label htmlFor="company">Company* :</label>
             <input
@@ -293,9 +329,9 @@ const EditSellerDetails = () => {
               placeholder="Enter your company"
               id="company"
               name="company"
-            //   value={data.company}
-            //   onChange={handleOnChange}
-              className="p-2 border rounded bg-white"
+              value={sellerDetails.company}
+              onChange={handleOnChange}
+              className="p-2 border rounded bg-white w-50"
             />
           </div>
           <div className="grid ml-16">
@@ -305,141 +341,23 @@ const EditSellerDetails = () => {
               placeholder="Enter your LTD"
               id="LTD"
               name="LTD"
-            //   value={data.LTD}
-            //   onChange={handleOnChange}
-              className="p-2 border rounded bg-white"
+              value={sellerDetails.LTD}
+              onChange={handleOnChange}
+              className="p-2 border rounded bg-white w-50"
             />
           </div>
         </div>
 
         <div className="flex items-center justify-center mt-5">
-          <button className="text-md border border-red-500 p-2 px-4 rounded-md transition hover:bg-red-600">
-            Edit Seller
+          <button
+            className="text-md border border-red-500 p-2 px-4 rounded-md transition hover:bg-red-600"
+            onClick={editSellerDetails}
+          >
+            Save
           </button>
         </div>
       </form>
     </div>
-    // <Container className="d-flex justify-content-center">
-    //   <div className="in_container">
-    //     <Card className="w-100">
-    //       <Card.Body className="main">
-    //         <div className="title">
-    //           <Card.Title className="title">Edit Seller Details</Card.Title>
-    //         </div>
-    //         <Form>
-    //           <Row>
-    //             <Col md={6}>
-    //               <Form.Group className="items">
-    //                 <Form.Label>Name</Form.Label>
-    //                 <Form.Control
-    //                   type="text"
-    //                   defaultValue={sellerDetails.name}
-    //                   onChange={(e) =>
-    //                     setSellerDetails({
-    //                       ...sellerDetails,
-    //                       name: e.target.value,
-    //                     })
-    //                   }
-    //                 />
-    //               </Form.Group>
-    //               <Form.Group className="items">
-    //                 <Form.Label>Company</Form.Label>
-    //                 <Form.Control
-    //                   type="text"
-    //                   defaultValue={sellerDetails.company}
-    //                   onChange={(e) =>
-    //                     setSellerDetails({
-    //                       ...sellerDetails,
-    //                       company: e.target.value,
-    //                     })
-    //                   }
-    //                 />
-    //               </Form.Group>
-    //               <Form.Group className="items">
-    //                 <Form.Label>Product Category</Form.Label>
-    //                 <Form.Control
-    //                   type="text"
-    //                   defaultValue={sellerDetails.productCategory}
-    //                   onChange={(e) =>
-    //                     setSellerDetails({
-    //                       ...sellerDetails,
-    //                       productCategory: e.target.value,
-    //                     })
-    //                   }
-    //                 />
-    //               </Form.Group>
-    //               <Form.Group className="items">
-    //                 <Form.Label>Stock</Form.Label>
-    //                 <Form.Control
-    //                   type="text"
-    //                   defaultValue={sellerDetails.stock}
-    //                   onChange={(e) =>
-    //                     setSellerDetails({
-    //                       ...sellerDetails,
-    //                       stock: e.target.value,
-    //                     })
-    //                   }
-    //                 />
-    //               </Form.Group>
-    //             </Col>
-    //             <Col md={6}>
-    //               <Form.Group className="items">
-    //                 <Form.Label>Phone Number</Form.Label>
-    //                 <Form.Control
-    //                   type="text"
-    //                   defaultValue={sellerDetails.phoneNumber}
-    //                   onChange={(e) =>
-    //                     setSellerDetails({
-    //                       ...sellerDetails,
-    //                       phoneNumber: e.target.value,
-    //                     })
-    //                   }
-    //                 />
-    //               </Form.Group>
-    //               <Form.Group className="items">
-    //                 <Form.Label>Email Id</Form.Label>
-    //                 <Form.Control
-    //                   type="email"
-    //                   defaultValue={sellerDetails.emailId}
-    //                   onChange={(e) =>
-    //                     setSellerDetails({
-    //                       ...sellerDetails,
-    //                       emailId: e.target.value,
-    //                     })
-    //                   }
-    //                 />
-    //               </Form.Group>
-    //               <Form.Group className="items">
-    //                 <Form.Label>GST No</Form.Label>
-    //                 <Form.Control
-    //                   type="text"
-    //                   defaultValue={sellerDetails.gstNo}
-    //                   onChange={(e) =>
-    //                     setSellerDetails({
-    //                       ...sellerDetails,
-    //                       gstNo: e.target.value,
-    //                     })
-    //                   }
-    //                 />
-    //               </Form.Group>
-    //             </Col>
-    //           </Row>
-    //         </Form>
-    //         <div className="allbuttons">
-    //           <div className="buttonall">
-    //             <Button onClick={() => update(id, sellerDetails)}>Save</Button>
-    //           </div>
-    //           <div className="buttonall">
-    //             <Button>Trash</Button>
-    //           </div>
-    //           <div className="buttonall">
-    //             <Button>Delete</Button>
-    //           </div>
-    //         </div>
-    //       </Card.Body>
-    //     </Card>
-    //   </div>
-    // </Container>
   );
 };
 

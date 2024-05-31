@@ -55,8 +55,15 @@ const SummaryApi = {
     DeleteAllSeller : {
         url : `${backendDomain}/api/deleteSeller/:id`,
         method : "delete"
+    },
+    GetParticularSellerDetails:{
+        url:`${backendDomain}/api/getSeller`,
+        method:"get"
+    },
+    EditParticularDetail:{
+        url:`${backendDomain}/api/editseller`,
+        method:"PATCH"
     }
-
 }
 
 export default SummaryApi

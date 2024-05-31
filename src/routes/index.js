@@ -17,6 +17,7 @@ import Support from "../pages/sellerDashboard/Support";
 import AllSellerDetails from "../pages/sellerDashboard/AllSellerDetails";
 import AddSeller from "../pages/sellerDashboard/AddSeller";
 import EditSellerDetails from "../pages/sellerDashboard/EditSellerDetails";
+import ViewSellerDetails from "../pages/sellerDashboard/ViewSellerDetails";
 
 const router = createBrowserRouter([
   {
@@ -60,7 +61,6 @@ const router = createBrowserRouter([
           {
             path: "all-seller",
             element: <AllSellerDetails />,
-          
           },
           {
             path: "add-seller",
@@ -97,6 +97,10 @@ const router = createBrowserRouter([
           {
             path: "editSellerDetails/:id",
             element: <EditSellerDetails />,
+          },
+          {
+            path: "viewSellerDetails/:id",
+            element: <ViewSellerDetails />,
           },
         ],
       },
