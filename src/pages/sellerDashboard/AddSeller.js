@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import AddSellerDetails from '../../components/AddSellerDetails'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import SummaryApi from '../../common';
+
 
 const AddSeller = () => {
 
