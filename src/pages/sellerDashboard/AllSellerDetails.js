@@ -68,7 +68,7 @@ const AllSellerDetails = () => {
                 <DeleteSellerDetails
                  sellerToDelete={sellerToDelete}
                     onClose={closeDeleteModel}
-                />
+                />    
             )}
 
         <table className='w-full seller_table'>
@@ -112,8 +112,6 @@ const AllSellerDetails = () => {
                     })
                 }
 
-               
-     
             </tbody>
         </table>
     </div>

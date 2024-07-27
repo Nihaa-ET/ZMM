@@ -6,10 +6,7 @@ const Home = () => {
  
   return (
     <div className='bg-slate-100'>
-     
-
       Home
-     
     </div>
   );
 };

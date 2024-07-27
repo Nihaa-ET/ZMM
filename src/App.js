@@ -13,23 +13,23 @@ import { setSellerDetail } from './store/sellerSlice';
 
 function App() {
 
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
-  // const fetchSellerDetails = async() =>{
+  const fetchSellerDetails = async() =>{
 
-  //   const dataResponse = await fetch(SummaryApi.Current_Sellers.url,{
-  //     method : SummaryApi.Current_Sellers.method,
-  //     credentials : 'include'
-  //   })
+    const dataResponse = await fetch(SummaryApi.Current_Sellers.url,{
+      method : SummaryApi.Current_Sellers.method,
+      credentials : 'include'
+    })
 
-  //   const dataApi = await dataResponse.json()
+    const dataApi = await dataResponse.json()
 
-  //   if(dataApi.success){
-  //      dispatch(setSellerDetail(dataApi.data))
-  //   }
+    if(dataApi.success){
+       dispatch(setSellerDetail(dataApi.data))
+    } 
     
-  //   console.log("seller_data",dataResponse);
-  // }
+    console.log("seller_data",dataResponse);
+  }
 
   useEffect(()=>{
     // user Details
@@ -37,9 +37,9 @@ function App() {
   },[])
 
   return (
-    <>
+      <>
     < Context.Provider value={{
-          //  fetchSellerDetails // Seller details fetch
+           fetchSellerDetails // Seller details fetch
     }} >
     <ToastContainer />
      <Header />
